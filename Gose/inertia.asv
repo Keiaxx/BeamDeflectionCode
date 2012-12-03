@@ -1,0 +1,45 @@
+function inertia = inertia(beamtype)
+
+%INERTIA Outputs the modulus of elasticity of a specific material.
+%
+%     outmat = gose_randmat(nrow,ncol,llimit,ulimit) returns a nrow x ncol
+%             array of random integers between llimit and ulimit.
+%
+%     Input:
+%      material      The name of the input material
+%
+%     Output:
+%      modofe        The modulus of elasticity of the specified material.
+
+%
+%   Adrian Gose
+%   Hoover High School
+%   0 Period - Mrs. Harris
+%   November 29, 2012
+%
+
+%Calculations
+
+bw = Beam.Width;
+bl
+ = Beam.Length;
+t = Beam.Thickness;
+
+switch beamtype
+    
+    case 1                                                                 %Solid Rectangle
+        inertia = bw * (h^3) / 12;
+        
+    case 2                                                                 %Hollow Rectangle
+        inertia = (bw * (h^3) / 12) - (bw - 2 * t) * (h - 2 * t)^3;
+        
+    case 3                                                                 %I Beam
+        y = h - ((t * h^2) + t^2 * (bw - t))/(2 * bw * t + (h - t) * t);
+        inertia = (1/3)*(t*y^3 + bw*(h - y)^3 - (bw-t)*(h - y - t)^3);
+        
+    case 4                                                                 %T Beam
+        inertia = (2*t*bw)*(1/2*(h - 2*t) + 1/2*t)^2 + (t * (h - 2 * t)^ 3) / 12;
+        
+    otherwise
+        disp('Error: Invalid beam shape.')
+end
