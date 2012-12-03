@@ -53,7 +53,7 @@ switch lower(material)
         modofe = 12.0 * 10^6;
         
     otherwise
-        modofe = 0;
+        disp('Error: Invalid beam material.')
         
         
 end
