@@ -1,4 +1,4 @@
-function inertia = inertia(beamtype)
+function inertia = mofinertia(beamtype)
 
 %INERTIA Outputs the modulus of elasticity of a specific material.
 %
@@ -23,7 +23,7 @@ function inertia = inertia(beamtype)
 
 bw = Beam.Width;
 bl = Beam.Length;
-bt = Beam.Thickness;
+bh = Beam.Height;
 
 switch beamtype
     
@@ -31,14 +31,14 @@ switch beamtype
         inertia = bw * (bl^3) / 12;
         
     case 2                                                                 %Hollow Rectangle
-        inertia = (bw * (bl^3) / 12) - (bw - 2 * bt) * (bl - 2 * bt)^3;
+        inertia = (bw * (bl^3) / 12) - (bw - 2 * bh) * (bl - 2 * bh)^3;
         
     case 3                                                                 %I Beam
-        yc = bl - ((bt * bl^2) + bt^2 * (bw - bt))/(2 * bw * bt + (bl - bt) * bt);
-        inertia = (1/3) * (bt * yc^3 + bw *(bl - yc)^3 - (bw - bt) * (bl - yc - bt)^3);
+        yc = bl - ((bh * bl^2) + bh^2 * (bw - bh))/(2 * bw * bh + (bl - bh) * bh);
+        inertia = (1/3) * (bh * yc^3 + bw *(bl - yc)^3 - (bw - bh) * (bl - yc - bh)^3);
         
     case 4                                                                 %T Beam
-        inertia = (2 * bt * bw) * (1/2 * (bl - 2 * bt) + 1/2 * bt)^2 + (bt * (bl - 2 * bt)^ 3) / 12;
+        inertia = (2 * bh * bw) * (1/2 * (bl - 2 * bh) + 1/2 * bh)^2 + (bh * (bl - 2 * bh)^ 3) / 12;
         
     otherwise
         disp('Error: Invalid beam shape.')
