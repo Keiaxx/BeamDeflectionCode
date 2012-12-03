@@ -22,34 +22,34 @@ function modofe = modofe(material)
 
 switch lower(material)
     
-    case 'aluminum'
+    case 1
         modofe = 10.0 * 10^6;
         
-    case 'brass'
+    case 2
         modofe = 15.9 * 10^6;
         
-    case 'chromium'
+    case 3
         modofe = 36.0 * 10^6;
         
-    case 'copper'
+    case 4
         modofe = 15.6 * 10^6;
         
-    case 'iron'
+    case 5
         modofe = 28.5 * 10^6;
         
-    case 'lead'
+    case 6
         modofe = 2.6 * 10^6;
         
-    case 'steel'
+    case 7
         modofe = 30.0 * 10^6;
         
-    case 'tin'
+    case 8
         modofe = 6.0 * 10^6;
         
-    case 'titanium'
+    case 9
         modofe = 16.8 * 10^6;
         
-    case 'zinc'
+    case 10
         modofe = 12.0 * 10^6;
         
     otherwise
