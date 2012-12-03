@@ -3,32 +3,6 @@ function [y1, y2, x] = deflection(Beam)
 %   Should be used in conjunction with the beam_deflection program and
 %           nothing else 
 
-% Checking To see what the material is and then get the Elasticity 
-    switch Beam.Material
-        case 1
-            E = 10E06;
-        case 2
-            E = 15.6E06;
-        case 3
-            E = 36.0E06;
-        case 4 
-            E = 15.6E06;
-        case 5
-            E = 28.5E06;
-        case 6
-            E = 2.6E06;
-        case 7
-            E = 30.0E06;
-        case 8 
-            E = 6.0E06;
-        case 9 
-            E = 16.8E06;
-        case 10
-            E = 12.0E06;    
-    end
-
-% Checking to see what the Load and support type is 
-
     I = Beam.Inertia;
     a = Beam.Location;
     F = Beam.Magnitude;
@@ -36,7 +10,8 @@ function [y1, y2, x] = deflection(Beam)
     b = Beam.Length-Beam.Location;
     x = linspace(0,Beam.Length);
     o = Beam.Magnitude/Beam.Length;   % Magnitude is them same as the force
-
+    E = Beam.Elasticity;
+    
     if Beam.Load == 1    % Referring to the point in the list during the selection
         if Beam.Support == 1 
             y1 = (F.*x.^2/6*E*I).*(3*a-x);     % 0<x<a

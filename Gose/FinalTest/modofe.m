@@ -1,9 +1,8 @@
-function modofe = modofe(material)
+function modofe = modofe(Beam)
 
 %MODOFE Outputs the modulus of elasticity of a specific material. 
 %
-%     outmat = gose_randmat(nrow,ncol,llimit,ulimit) returns a nrow x ncol
-%             array of random integers between llimit and ulimit.
+%     modofe(Beam) = modulus of elasticity for the beam
 %
 %     Input:
 %      material      The name of the input material
@@ -20,7 +19,7 @@ function modofe = modofe(material)
 
 %Calculations
 
-switch lower(material)
+switch Beam.Material
     
     case 1
         modofe = 10.0 * 10^6;
