@@ -1,13 +1,9 @@
-function inertia = mofinertia(bt,bw,bl,bh)
+function inertia = mofinertia(Beam)
 
 %MOFINERTIA Outputs the modulus of elasticity of a specific material.
 %
-%     inertia = mofinertia(bt,bw,bl,bh) Returns the moment of inertia depending
+%     inertia = mofinertia(Beam) Returns the moment of inertia depending
 %     on the beam shape. 
-% BW = Beam.CrossSection 
-% BW = Beam.Width 
-% BL = Beam.Length 
-% BH = Beam.Height
 %
 %     Input:
 %      beamtype      The type of beam (1, 2, 3, 4: Solid, Hollow, I and T
@@ -25,6 +21,10 @@ function inertia = mofinertia(bt,bw,bl,bh)
 
 %Calculations
 
+bt = Beam.CrossSection;
+bw = Beam.Width;
+bl = Beam.Length;
+bh = Beam.Height;
 
 switch bt
     
