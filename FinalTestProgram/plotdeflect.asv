@@ -1,19 +1,4 @@
-function [plot1,plot2] = plotdeflect(x1, y1, x2, y2)
+function [plot1,plot2] = plotdeflect(x1 ,x2, y1, y2)
 
-
-astr=['Deflection of a ',Beam.Material,', ', Beam.Support,' with a ',Beam.Load,' Load and ',Beam.Support,' Support'];
-bstr=['Beam Displacement (',Beam.Magnitude,'N)'];
-
-x=(linspace(0,Beam.Length));
-y=[y1 y2];
-
-plot(x,y)
-set(plot(x,Beam.y),'LineWidth',3);
-set(gca,'XTick',0:5:Beam.Length)
-grid on
-title(astr,'fontsize',9,'fontweight','bold');
-xlabel('Beam Length');
-ylabel(bstr);
-set(gca,'YLim',[-150 150]);
-set(gca,'XLim',[0 Beam.Length]);
+%% Removed For Testing: Awaiting final Plot Functio
 end

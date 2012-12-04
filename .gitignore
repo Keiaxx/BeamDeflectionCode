@@ -130,6 +130,7 @@ Desktop.ini
 ## MATLAB
 #########
 *.asv 
+.asv
 # Annoying thing
 
 
