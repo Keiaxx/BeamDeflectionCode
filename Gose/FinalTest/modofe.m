@@ -1,4 +1,4 @@
-function modofe = modofe(Beam)
+function modofe = modofe(BeamMaterial)
 
 %MODOFE Outputs the modulus of elasticity of a specific material. 
 %
@@ -19,7 +19,7 @@ function modofe = modofe(Beam)
 
 %Calculations
 
-switch Beam.Material
+switch BeamMaterial
     
     case 1
         modofe = 10.0 * 10^6;
@@ -52,6 +52,7 @@ switch Beam.Material
         modofe = 12.0 * 10^6;
         
     otherwise
+        
         disp('Error: Invalid beam material.')
         
         

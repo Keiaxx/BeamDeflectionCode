@@ -106,36 +106,20 @@
     MagLoc = inputdlg(Prompt,dlg_title,num_lines,def,options);
     Beam.Magnitude = str2double(MagLoc(1,1));
     Beam.Location = str2double(MagLoc(2,1));
+    
+%% Process Function Calls
 
-%% Process - Moment of Inertia
-Beam.Inertia = mofinertia(Beam);
+% Process - Modulus of Elasticity
+Beam.Elasticity = modofe(Beam.Material);
 
-%% Process - Modulus of Elasticity
-Beam.Elasticity = modofe(Beam);
+% Process - Moment of Inertia
+Beam.Inertia = mofinertia(Beam.CrossSection, Beam.Width, Beam.Length, Beam.Height);
 
-%% Process - Beam Deflection Equations
-Beam.Deflection = deflection(Beam);
+% Process - Beam Deflection Equations
+[Beam.y1, Beam.y2, Beam.x] = deflection(Beam);
+
+%% Output Function Calls
+
+
         
 %% Output
-% Output function created by Ryan Starcher
-% Output plot of beam deflection
-astr=['Deflection of a ',Beam.Material,', ', Beam.Support,' with a ',Beam.Load,' Load and ',Beam.Support,' Support'];
-bstr=['Beam Displacement (',Beam.Magnitude,'N)'];
-
-x=(linspace(0,Beam.Length));
-y=[y1 y2];
-
-plot(x,y)
-set(plot(x,Beam.y),'LineWidth',3);
-set(gca,'XTick',0:5:Beam.Length)
-grid on
-title(astr,'fontsize',9,'fontweight','bold');
-xlabel('Beam Length');
-ylabel(bstr);
-set(gca,'YLim',[-150 150]);
-set(gca,'XLim',[0 Beam.Length]);
-
-% Textual Display of other 2 functions
-disp(sprintf('\nSpecial qualities of this beam include:'))
-disp(sprintf('\n\tModulus of Elasticity: \t%8.2f pounds per square inch.',E))
-disp(sprintf('\tMoment of Inertia: \t\t%8.2f pounds times square feet.',inertia))
