@@ -28,9 +28,6 @@
 %           MagLoc = is the inputed magnitude and location of the force on the beam
 %           Beam.Magnitude = the magnitude of the force
 %           Beam.Location = the location of the beam 
-%           Beam.Elasticity = The Modulus of Elasticity of the beam
-%           material
-%           Beam.Deflection = The deflection points ready to be plotted
 %
 % Functions Called: N/A
 % 
@@ -52,7 +49,7 @@
     %Beam.CrossSection = Csection(CrossSection);   // If I need the actual name and not the number
     
 
-    if Beam.CrossSection ~= 1 % Is Checking to see what Bea was chosen 
+    if Beam.CrossSection ~= 1 % Is Checking to see what Beam was chosen 
         Prompt = {'What is the length of the Beam (in.)?','What is the width of the Beam (in.)?',...  % all of these things are input for the inputdlg
         'What is the height of the Beam (in.)?','What is the thickness of the Beam (in.)?'}; % also applies to similar situations 
         dlg_title = 'Dimensons of the Beam.';                                                         %
@@ -106,20 +103,151 @@
     MagLoc = inputdlg(Prompt,dlg_title,num_lines,def,options);
     Beam.Magnitude = str2double(MagLoc(1,1));
     Beam.Location = str2double(MagLoc(2,1));
+
+%% Process - Moment of Inertia
+% Inertia function created by Adrian Gose
+% function inertia = mofinertia(bt,bw,bl,bh)
+% MOFINERTIA Outputs the modulus of elasticity of a specific material.
+%     inertia = mofinertia(bt,bw,bl,bh) Returns the moment of inertia depending
+%     on the beam shape. 
+bt = Beam.CrossSection;
+bw = Beam.Width;
+bl = Beam.Length;
+bh = Beam.Height;
+%
+%     Input:
+%      beamtype      The type of beam (1, 2, 3, 4: Solid, Hollow, I and T
+%      Respectively)
+%
+%     Output:
+%      inertia       The Moment of inertia.
+%
+%   Adrian Gose
+%   Hoover High School
+%   0 Period - Mrs. Harris
+%   December 2, 2012
+%
+
+% Calculations
+
+switch bt
     
-%% Process Function Calls
-
-% Process - Modulus of Elasticity
-Beam.Elasticity = modofe(Beam.Material);
-
-% Process - Moment of Inertia
-Beam.Inertia = mofinertia(Beam.CrossSection, Beam.Width, Beam.Length, Beam.Height);
-
-% Process - Beam Deflection Equations
-[Beam.y1, Beam.y2, Beam.x] = deflection(Beam);
-
-%% Output Function Calls
-
-
+    case 1                                                                 %Solid Rectangle
+        inertia = bw * (bl^3) / 12;
         
+    case 2                                                                 %Hollow Rectangle
+        inertia = (bw * (bl^3) / 12) - (bw - 2 * bh) * (bl - 2 * bh)^3;
+        
+    case 3                                                                 %I Beam
+        yc = bl - ((bh * bl^2) + bh^2 * (bw - bh))/(2 * bw * bh + (bl - bh) * bh);
+        inertia = (1/3) * (bh * yc^3 + bw *(bl - yc)^3 - (bw - bh) * (bl - yc - bh)^3);
+        
+    case 4                                                                 %T Beam
+        inertia = (2 * bh * bw) * (1/2 * (bl - 2 * bh) + 1/2 * bh)^2 + (bh * (bl - 2 * bh)^ 3) / 12;
+        
+    otherwise
+        disp('Error: Invalid beam shape.')
+        
+end
+
+%% Process - Modulus of Elasticity
+% Elasticity function created by Lawson Hoover
+% function [y1, y2, x] = Elasticity_Deflection(z)
+% Elasticity_Deflection Finds the Modulous of elacticity and then uses that to find the amount of deflection
+%   Should be used in conjunction with the beam_deflection program and
+%           nothing else 
+% Checking To see what the material is and then get the Elasticity 
+    switch Beam.Material
+        case 1
+            E = 10E06;
+        case 2
+            E = 15.6E06;
+        case 3
+            E = 36.0E06;
+        case 4 
+            E = 15.6E06;
+        case 5
+            E = 28.5E06;
+        case 6
+            E = 2.6E06;
+        case 7
+            E = 30.0E06;
+        case 8 
+            E = 6.0E06;
+        case 9 
+            E = 16.8E06;
+        case 10
+            E = 12.0E06;    
+    end
+
+%% Process - Beam Deflection Equations
+% Deflection function created by Lawson Hoover
+% Checking to see what the Load and support type is 
+
+    I = inertia;
+    a = Beam.Location;
+    F = Beam.Magnitude;
+    L = Beam.Length;
+    b = Beam.Length-Beam.Location;
+    x = linspace(0,Beam.Length);
+    o = Beam.Magnitude/Beam.Length;   % Magnitude is them same as the force
+    y = zeros(1,100);
+    i = 1;
+    Beam.x = x;
+    
+    if Beam.Load == 1 % Referring to the point in the list during the selection
+        if Beam.Support == 1 
+            while x(i) < a
+                y(i) = (F*x(i)^2/6*E*I)*(3*a-x(i));             % 0<x<a                
+                i = i + 1;
+            end
+            while x(i) <= L && x(i) < a
+                y(i) = (F*a^2/6*E*I)*(3*x(i)-a);                % a<x<L                
+                i = i+1;
+            end
+            Beam.y = y;
+        else  % x.Support == 2
+            while x(i) < a
+                y(i) = (F*b*x(i)/6*L*E*I)*(L^2-x(i)^2-b^2);     % 0<x<a
+                i = i+1;
+            end            
+            while x(i) < L                                      % This equation is set up right 
+                y(i) = (F*b/6*E*L*I)*((L/b)*(x(i)-a)^3+(L^2-b^2)*x(i)-x(i)^3);% a<x<L
+                i = i+1;
+            end
+            Beam.y = y;
+        end
+    else    % x.Load == 2
+        if Beam.Support == 1
+            Beam.y = (o.*x.^2/24*E*I).*(x.^2+6*L^2-4*L.*x);
+        else % x.Support == 2 
+            Beam.y = (o.*x.^2/24*E*I).*((L^3-2*L.*x.^2)+x.^3);
+        end
+    end
+    
 %% Output
+% Output function created by Ryan Starcher
+% Output plot of beam deflection
+
+a=Lmaterial(Beam.Material);
+b=Csection(Beam.CrossSection);
+c=loadType(Beam.Load);
+d=supportP(Beam.Support);
+
+astr=['Deflection of a ',b,', ', a,' beam with a ',c,' Load and ',d,' Support'];
+bstr=['Beam Displacement (',num2str(Beam.Magnitude),'N)'];
+
+plot(x,y)
+set(plot(x,y),'LineWidth',3);
+set(gca,'XTick',0:5:Beam.Length)
+grid on
+title(astr,'fontsize',9,'fontweight','bold');
+xlabel('Beam Length');
+ylabel(bstr);
+set(gca,'YLim',[-20 20]);
+set(gca,'XLim',[0 Beam.Length]);
+
+% Textual Display of other 2 functions
+disp(sprintf('\nSpecial qualities of this beam include:'))
+disp(sprintf('\n\tModulus of Elasticity: \t%12.2f pounds per square inch.',E))
+disp(sprintf('\tMoment of Inertia: \t\t%12.2f pounds times square feet.',inertia))
