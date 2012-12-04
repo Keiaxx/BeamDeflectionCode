@@ -227,7 +227,7 @@ b=Csection(Beam.CrossSection);
 c=loadType(Beam.Load);
 d=supportP(Beam.Support);
 
-astr=['Deflection of a ',b,', ', a,' beam with a ',c,' Load and ',d,' Support'];
+astr=['Deflection of a ',b,', ', a,' beam with a ',c,' Load at' and ',d,' Support'];
 bstr=['Beam Displacement (',num2str(Beam.Magnitude),'N)'];
 
 plot(x1 ,-y1)
@@ -239,6 +239,7 @@ set(plot(x2, -y2),'LineWidth',3);
 hold off
 set(gca, 'XTickLabel', 0:1:Beam.Length);
 grid on
+
 title(astr,'fontsize',9,'fontweight','bold');
 xlabel('Beam Length');
 ylabel(bstr);
@@ -251,11 +252,11 @@ disp(sprintf('\tMoment of Inertia: \t\t%12.2f pounds times square feet.',inertia
 
 %% Testing
 
-% plot(x1 ,-y1)
-% hold on
-% plot(x2, -y2)
-% 
-% set(plot(x1, -y1),'LineWidth',3);
-% set(plot(x2, -y2),'LineWidth',3);
-% hold off
-% set(gca, 'XTickLabel', 0:1:Beam.Length);
+plot(x1 ,-y1)
+hold on
+plot(x2, -y2)
+
+set(plot(x1, -y1),'LineWidth',3);
+set(plot(x2, -y2),'LineWidth',3);
+hold off
+set(gca, 'XTickLabel', 0:1:Beam.Length);
