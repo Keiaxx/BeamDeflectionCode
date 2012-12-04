@@ -147,7 +147,13 @@ clear
 bx = Beam.CrossSection;
 bw = Beam.Width;
 bh = Beam.Height;
-bt = Beam.Thickness;
+
+if bx == 1   % If the beam type is a Solid Rectangle, Don't set the BT Variable as there will be no thickness to relieve from the error. 
+    bt = [];
+else
+    bt = Beam.Thickness;
+end
+
 %
 %     Input:
 %      beamtype      The type of beam (1, 2, 3, 4: Solid, Hollow, I and T
