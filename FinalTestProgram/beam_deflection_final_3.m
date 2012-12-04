@@ -107,51 +107,6 @@ clear
     Beam.Magnitude = str2double(MagLoc(1,1));
     Beam.Location = str2double(MagLoc(2,1));
 
-%% Process - Moment of Inertia
-% Inertia function created by Adrian Gose
-% function inertia = mofinertia(bt,bw,bl,bh)
-% MOFINERTIA Outputs the modulus of elasticity of a specific material.
-%     inertia = mofinertia(bt,bw,bl,bh) Returns the moment of inertia depending
-%     on the beam shape. 
-bt = Beam.CrossSection;
-bw = Beam.Width;
-bl = Beam.Length;
-bh = Beam.Height;
-%
-%     Input:
-%      beamtype      The type of beam (1, 2, 3, 4: Solid, Hollow, I and T
-%      Respectively)
-%
-%     Output:
-%      inertia       The Moment of inertia.
-%
-%   Adrian Gose
-%   Hoover High School
-%   0 Period - Mrs. Harris
-%   December 2, 2012
-%
-
-% Calculations
-
-switch bt
-    
-    case 1                                                                 %Solid Rectangle
-        inertia = bw * (bl^3) / 12;
-        
-    case 2                                                                 %Hollow Rectangle
-        inertia = (bw * (bl^3) / 12) - (bw - 2 * bh) * (bl - 2 * bh)^3;
-        
-    case 3                                                                 %I Beam
-        yc = bl - ((bh * bl^2) + bh^2 * (bw - bh))/(2 * bw * bh + (bl - bh) * bh);
-        inertia = (1/3) * (bh * yc^3 + bw *(bl - yc)^3 - (bw - bh) * (bl - yc - bh)^3);
-        
-    case 4                                                                 %T Beam
-        inertia = (2 * bh * bw) * (1/2 * (bl - 2 * bh) + 1/2 * bh)^2 + (bh * (bl - 2 * bh)^ 3) / 12;
-        
-    otherwise
-        disp('Error: Invalid beam shape.')
-        
-end
 
 %% Process - Modulus of Elasticity
 % Elasticity function created by Lawson Hoover
@@ -182,6 +137,52 @@ end
         case 10
             E = 12.0E06;    
     end
+    
+%% Process - Moment of Inertia
+% Inertia function created by Adrian Gose
+% function inertia = mofinertia(bt,bw,bl,bh)
+% MOFINERTIA Outputs the modulus of elasticity of a specific material.
+%     inertia = mofinertia(bt,bw,bl,bh) Returns the moment of inertia depending
+%     on the beam shape. 
+bx = Beam.CrossSection;
+bw = Beam.Width;
+bh = Beam.Height;
+bt = Beam.Thickness;
+%
+%     Input:
+%      beamtype      The type of beam (1, 2, 3, 4: Solid, Hollow, I and T
+%      Respectively)
+%
+%     Output:
+%      inertia       The Moment of inertia.
+%
+%   Adrian Gose
+%   Hoover High School
+%   0 Period - Mrs. Harris
+%   December 2, 2012
+%
+
+% Calculations
+
+switch bx
+    
+    case 1                                                                 %Solid Rectangle
+        inertia = bw * (bh^3) / 12;
+        
+    case 2                                                                 %Hollow Rectangle
+        inertia = (bw * (bh^3) / 12) - (bw - 2 * bt) * (bh - 2 * bt)^3;
+        
+    case 3                                                                 %I Beam
+        yc = bh - ((bt * bh^2) + bt^2 * (bw - bt))/(2 * bw * bt + (bh - bt) * bt);
+        inertia = (1/3) * (bt * yc^3 + bw *(bh - yc)^3 - (bw - bt) * (bh - yc - bt)^3);
+        
+    case 4                                                                 %T Beam
+        inertia = (2 * bt * bw) * (1/2 * (bh - 2 * bt) + 1/2 * bt)^2 + (bt * (bh - 2 * bt)^ 3) / 12;
+        
+    otherwise
+        disp('Error: Invalid beam shape.')
+        
+end
 
 %% Process - Beam Deflection Equations
 % Deflection function created by Lawson Hoover
@@ -230,14 +231,13 @@ d=supportP(Beam.Support);
 astr=['Deflection of a ',b,', ', a,' beam with a ',c,' Load and ',d,' Support'];
 bstr=['Beam Displacement (',num2str(Beam.Magnitude),'N)'];
 
-plot(x1 ,-y1)
-hold on
-plot(x2, -y2)
+
 
 set(plot(x1, -y1),'LineWidth',3);
+hold on
 set(plot(x2, -y2),'LineWidth',3);
 hold off
-set(gca, 'XTickLabel', 0:1:Beam.Length);
+
 grid on
 title(astr,'fontsize',9,'fontweight','bold');
 xlabel('Beam Length');
