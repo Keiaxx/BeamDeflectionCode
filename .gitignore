@@ -126,6 +126,12 @@ Thumbs.db
 # Folder config file
 Desktop.ini
 
+########
+## MATLAB
+#########
+*.asv 
+# Annoying thing
+
 
 #############
 ## Python
