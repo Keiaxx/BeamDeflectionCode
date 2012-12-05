@@ -38,6 +38,8 @@
 clc
 clf
 clear
+figwin=findobj('Type','figure'); % Close open figure windows
+delete(figwin);
 %% Input
 % Created by Laswon Hoover
 % function [] = beam_deflection_input(varargin) 
@@ -224,6 +226,11 @@ elseif Beam.Support == 2 % Simply SUpported
     end
 end
 
+Beam.x1 = x1;  % Prep for friendly input for plot function
+Beam.x2 = x2;
+Beam.y1 = y1;
+Beam.y2 = y2;
+
 
 %% Output
 % Output function created by Ryan Starcher
@@ -233,35 +240,28 @@ a=Lmaterial(Beam.Material);
 b=Csection(Beam.CrossSection);
 c=loadType(Beam.Load);
 d=supportP(Beam.Support);
-
+nd = zeros(1,100); % Nondeflect zeros
 astr=['Deflection of a ',b,', ', a,' beam with a ',c,' Load and ',d,' Support'];
-bstr=['Beam Displacement (',num2str(Beam.Magnitude),'N)'];
+bstr=['Beam Displacement (in) (',num2str(Beam.Magnitude),'N Force)'];
 
 
 
-set(plot(x1, -y1),'LineWidth',3);
+plot(Beam.x1, nd, 'r', 'LineWidth',3);
 hold on
-set(plot(x2, -y2),'LineWidth',3);
+plot(Beam.x2, nd, 'r', 'LineWidth',3);
+plot(Beam.x1, -Beam.y1, 'b', 'LineWidth',3);
+plot(Beam.x2, -Beam.y2, 'b', 'LineWidth',3);
 hold off
 
 grid on
 title(astr,'fontsize',9,'fontweight','bold');
-xlabel('Beam Length');
+xlabel('Beam Length (in)');
 ylabel(bstr);
 
 
-% Textual Display of other 2 functions
+
+
+%% Textual Display of other 2 functions (Not part of Plot Function)
 disp(sprintf('\nSpecial qualities of this beam include:'))
 disp(sprintf('\n\tModulus of Elasticity: \t%12.2f pounds per square inch.',E))
 disp(sprintf('\tMoment of Inertia: \t\t%12.2f pounds times square feet.',inertia))
-
-%% Testing
-
-% plot(x1 ,-y1)
-% hold on
-% plot(x2, -y2)
-% 
-% set(plot(x1, -y1),'LineWidth',3);
-% set(plot(x2, -y2),'LineWidth',3);
-% hold off
-% set(gca, 'XTickLabel', 0:1:Beam.Length);

@@ -38,6 +38,8 @@
 clc
 clf
 clear
+figwin=findobj('Type','figure'); % Close open figure windows
+delete(figwin);
 %% Input
 % Created by Laswon Hoover
 % function [] = beam_deflection_input(varargin) 
@@ -144,10 +146,16 @@ clear
 % MOFINERTIA Outputs the modulus of elasticity of a specific material.
 %     inertia = mofinertia(bt,bw,bl,bh) Returns the moment of inertia depending
 %     on the beam shape. 
-bt = Beam.CrossSection;
+bx = Beam.CrossSection;
 bw = Beam.Width;
-bl = Beam.Length;
 bh = Beam.Height;
+
+if bx == 1   % If the beam type is a Solid Rectangle, Don't set the BT Variable as there will be no thickness to relieve from the error. 
+    bt = [];
+else
+    bt = Beam.Thickness;
+end
+
 %
 %     Input:
 %      beamtype      The type of beam (1, 2, 3, 4: Solid, Hollow, I and T
@@ -164,20 +172,20 @@ bh = Beam.Height;
 
 % Calculations
 
-switch bt
+switch bx
     
     case 1                                                                 %Solid Rectangle
-        inertia = bw * (bl^3) / 12;
+        inertia = bw * (bh^3) / 12;
         
     case 2                                                                 %Hollow Rectangle
-        inertia = (bw * (bl^3) / 12) - (bw - 2 * bh) * (bl - 2 * bh)^3;
+        inertia = (bw * (bh^3) / 12) - (bw - 2 * bt) * (bh - 2 * bt)^3;
         
     case 3                                                                 %I Beam
-        yc = bl - ((bh * bl^2) + bh^2 * (bw - bh))/(2 * bw * bh + (bl - bh) * bh);
-        inertia = (1/3) * (bh * yc^3 + bw *(bl - yc)^3 - (bw - bh) * (bl - yc - bh)^3);
+        yc = bh - ((bt * bh^2) + bt^2 * (bw - bt))/(2 * bw * bt + (bh - bt) * bt);
+        inertia = (1/3) * (bt * yc^3 + bw *(bh - yc)^3 - (bw - bt) * (bh - yc - bt)^3);
         
     case 4                                                                 %T Beam
-        inertia = (2 * bh * bw) * (1/2 * (bl - 2 * bh) + 1/2 * bh)^2 + (bh * (bl - 2 * bh)^ 3) / 12;
+        inertia = (2 * bt * bw) * (1/2 * (bh - 2 * bt) + 1/2 * bt)^2 + (bt * (bh - 2 * bt)^ 3) / 12;
         
     otherwise
         disp('Error: Invalid beam shape.')
@@ -218,6 +226,11 @@ elseif Beam.Support == 2 % Simply SUpported
     end
 end
 
+Beam.x1 = x1;  % Prep for friendly input for plot function
+Beam.x2 = x2;
+Beam.y1 = y1;
+Beam.y2 = y2;
+
 
 %% Output
 % Output function created by Ryan Starcher
@@ -227,24 +240,28 @@ a=Lmaterial(Beam.Material);
 b=Csection(Beam.CrossSection);
 c=loadType(Beam.Load);
 d=supportP(Beam.Support);
-
+nd = zeros(1,100); % Nondeflect zeros
 astr=['Deflection of a ',b,', ', a,' beam with a ',c,' Load and ',d,' Support'];
-bstr=['Beam Displacement (',num2str(Beam.Magnitude),'N)'];
+bstr=['Beam Displacement (in) (',num2str(Beam.Magnitude),'N Force)'];
 
 
 
-set(plot(x1, -y1),'LineWidth',3);
+plot(Beam.x1, nd, 'r', 'LineWidth',3);
 hold on
-set(plot(x2, -y2),'LineWidth',3);
+plot(Beam.x2, nd, 'r', 'LineWidth',3);
+plot(Beam.x1, -Beam.y1, 'b', 'LineWidth',3);
+plot(Beam.x2, -Beam.y2, 'b', 'LineWidth',3);
 hold off
 
 grid on
 title(astr,'fontsize',9,'fontweight','bold');
-xlabel('Beam Length');
+xlabel('Beam Length (in)');
 ylabel(bstr);
 
+legend(gca, 'Undeflected Beam', 'Deflected Beam')
 
-% Textual Display of other 2 functions
+
+%% Textual Display of other 2 functions (Not part of Plot Function)
 disp(sprintf('\nSpecial qualities of this beam include:'))
 disp(sprintf('\n\tModulus of Elasticity: \t%12.2f pounds per square inch.',E))
 disp(sprintf('\tMoment of Inertia: \t\t%12.2f pounds times square feet.',inertia))
