@@ -1,11 +1,11 @@
-% Filename = beam_deflection_final.m
+% Filename = beam_deflection_final_4.m
 % -------------------------------
 % Lawson Hoover, Adrian Gose, Ryan Starcher
 % Engineering Computations with MATLAB
 % Beam Deflection Project: Basecamp Group #10
 %
 % Start Date: November 28, 2012
-% Last Revised: December 3, 2012
+% Last Revised: December 5, 2012
 % 
 % Purpose: To gather and store all of the required input for the beam deflection program.
 % 
@@ -32,9 +32,21 @@
 % Functions Called: N/A
 % 
 % --------------------------------------------------------------------------
+% Credit:
 % 
+% Input:                             Lawson Hoover
+% Modulus of Elasticity:             Lawson Hoover
+% Moment of Inertia:                 Adrian Gose
+% Deflection:                        Lawson Hoover
+% Output function:                   Ryan Starcher
+% Combining parts into final script: Ryan Starcher
+% Final script editing:              Ryan Starcher
+%                                    Lawson Hoover
+%                                    Adrian Gose
+%
 % Begin:
 %% Clear Variables/Workspace/Plots
+% Created by Adrian Gose
 clc
 clf
 clear
@@ -242,7 +254,7 @@ c=loadType(Beam.Load);
 d=supportP(Beam.Support);
 nd = zeros(1,100); % Nondeflect zeros
 astr=['Deflection of a ',b,', ', a,' beam with a ',c,' Load and ',d,' Support'];
-bstr=['Beam Displacement (in) (',num2str(Beam.Magnitude),'N Force)'];
+bstr=['Beam Displacement (in) (',num2str(Beam.Magnitude),'lbs)'];
 
 
 
@@ -263,5 +275,5 @@ ylabel(bstr);
 
 %% Textual Display of other 2 functions (Not part of Plot Function)
 disp(sprintf('\nSpecial qualities of this beam include:'))
-disp(sprintf('\n\tModulus of Elasticity: \t%12.2f pounds per square inch.',E))
+disp(sprintf('\n\tModulus of Elasticity: \t%12.2f pounds per square inches.',E))
 disp(sprintf('\tMoment of Inertia: \t\t%12.2f pounds times square feet.',inertia))
