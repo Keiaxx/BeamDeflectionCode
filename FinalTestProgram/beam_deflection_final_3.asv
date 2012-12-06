@@ -311,13 +311,12 @@ Beam.y2 = y2;
 
 it = 1;
 barnum = 1;
-wbgui = waitbar(0, 'Calculating...');
 while barnum <= 100
-    waitbar(barnum/100)
+    wbgui = waitbar(barnum/100);
     pause(.01)
     barnum = barnum + 1;
+    delete(wbgui)
 end
-delete(wbgui)
 
 %% Output
 % Output function created by Ryan Starcher
