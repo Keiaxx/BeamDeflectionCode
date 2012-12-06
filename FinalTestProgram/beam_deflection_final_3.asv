@@ -311,12 +311,15 @@ Beam.y2 = y2;
 
 it = 1;
 barnum = 1;
+wbgui = waitbar(0, 'Calculating...');
 while barnum <= 100
-    wbgui = waitbar(barnum/100);
-    pause(.01)
+    waitbar(barnum/100)
+    
+     randpause = 0.005 + (0.2-0.005).*rand(100,1);
+    pause(randpause)
     barnum = barnum + 1;
-    delete(wbgui)
 end
+delete(wbgui)
 
 %% Output
 % Output function created by Ryan Starcher
