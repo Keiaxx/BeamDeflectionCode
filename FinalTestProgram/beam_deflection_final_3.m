@@ -1,4 +1,4 @@
-% Filename = beam_deflection_final_4.m
+% Filename = beam_deflection_final_7.m
 % -------------------------------
 % Lawson Hoover, Adrian Gose, Ryan Starcher
 % Engineering Computations with MATLAB
@@ -79,6 +79,17 @@ delete(figwin);
         Beam.Width = str2double(Dimen(2,1));    % STR2DOUBLE is used to convert the strings to numbers 
         Beam.Height = str2double(Dimen(3,1));
         Beam.Thickness = str2double(Dimen(4,1));
+        if isnan(Beam.Width) == 1 || isnan(Beam.Height) == 1 || isnan(Beam.Thickness) == 1 || isnan(Beam.Length) == 1
+            beep
+            uiwait(errordlg('Make sure all input is a number!'));
+            error('Input must be a number');
+        end
+        
+        if Beam.Width <= 0 || Beam.Height <= 0 || Beam.Thickness <= 0 ||Beam.Length <= 0
+            beep
+            uiwait(errordlg('Make sure that all input is greater than 0'));
+            error('Input must be larger than 0');
+        end
     else
         Prompt = {'What is the length of the Beam (in.)?','What is the width of the Beam (in.)?',...
         'What is the height of the Beam (in.)?'};
@@ -91,6 +102,16 @@ delete(figwin);
         Beam.Length = str2double(Dimen(1,1));   
         Beam.Width = str2double(Dimen(2,1));     
         Beam.Height = str2double(Dimen(3,1));
+        
+        if isnan(Beam.Width) == 1 || isnan(Beam.Height) == 1 ||isnan(Beam.Length) == 1
+            beep
+            uiwait(errordlg('Make sure all input is a number! Please Exit out of remaining boxes and run program again.'));
+        end
+        
+        if Beam.Width <= 0 || Beam.Height <= 0 || Beam.Length <= 0
+            beep
+            uiwait(errordlg('Make sure that all input is greater than 0!  Please Exit out of remaining boxes and run program again.'));
+        end
     end
     
 
@@ -120,7 +141,18 @@ delete(figwin);
     MagLoc = inputdlg(Prompt,dlg_title,num_lines,def,options);
     Beam.Magnitude = str2double(MagLoc(1,1));
     Beam.Location = str2double(MagLoc(2,1));
-
+    
+        if isnan(Beam.Magnitude) == 1 || isnan(Beam.Location) == 1 
+            beep
+            uiwait(errordlg('Make sure all input is a number! Please Exit out of remaining boxes and run program again.'));
+            error('Input must be a number');
+        end
+        
+        if Beam.Magnitude <= 0 || Beam.Location <= 0 
+            beep
+            uiwait(errordlg('Make sure that all input is greater than 0!  Please Exit out of remaining boxes and run program again.'));
+            error('Input must be greater than 0');
+        end
 
 %% Process - Modulus of Elasticity
 % Elasticity function created by Lawson Hoover
@@ -222,19 +254,19 @@ end
 
 if Beam.Support == 1 % Cantilevered
     if Beam.Load == 1 % Point
-        y1 = (F.*x1.^2/6*E*I).*(3*a-x1);    % 0<x<a
-        y2 = (F.*a^2/6*E*I).*(3*x2-a);      % a<x<L
+        y1 = ((F.*x1.^2)/(6*E*I)).*(3*a-x1);    % 0<x<a
+        y2 = ((F.*a^2)/(6*E*I)).*(3*x2-a);      % a<x<L
     elseif Beam.Load == 2 % Uniform
-        y1 = (o.*x1.^2/24*E*I).*(x1.^2+6*L^2-4*L.*x1);
-        y2 = (o.*x2.^2/24*E*I).*(x2.^2+6*L^2-4*L.*x2);
+        y1 = ((o.*x1.^2)/(24*E*I)).*(x1.^2+6*L^2-4*L.*x1);
+        y2 = ((o.*x2.^2)/(24*E*I)).*(x2.^2+6*L^2-4*L.*x2);
     end
-elseif Beam.Support == 2 % Simply SUpported
+elseif Beam.Support == 2 % Simply Supported
     if Beam.Load == 1 % Point
-        y1 = (F*b.*x1/6*L*E*I).*(L^2-x1.^2-b^2);                    % 0<x<a
-        y2 = (F*b/6*E*L*I).*((L/b).*(x2-a).^3+(L^2-b^2).*x2-x2.^3); % a<x<L
+        y1 = ((F*b.*x1)/(6*L*E*I)).*(L^2-x1.^2-b^2);                    % 0<x<a
+        y2 = ((F*b)/(6*E*L*I)).*((L/b).*(x2-a).^3+(L^2-b^2).*x2-x2.^3); % a<x<L
     elseif Beam.Load == 2 % Uniform
-        y1 = (o.*x1.^2/24*E*I).*((L^3-2*L.*x1.^2)+x1.^3);
-        y2 = (o.*x2.^2/24*E*I).*((L^3-2*L.*x2.^2)+x2.^3);
+        y1 = ((o.*x1)/(24*E*I)).*((L^3)-(2*L.*x1.^2)+(x1.^3));
+        y2 = ((o.*x2)/(24*E*I)).*((L^3)-(2*L.*x2.^2)+(x2.^3));
     end
 end
 
@@ -253,10 +285,8 @@ b=Csection(Beam.CrossSection);
 c=loadType(Beam.Load);
 d=supportP(Beam.Support);
 nd = zeros(1,100); % Nondeflect zeros
-astr=['Deflection of a ',b,', ', a,' beam with a ',c,' Load and ',d,' Support'];
+astr=['Deflection of a/an ',a,b,' with a ',c,' Load and ',d,' Support'];
 bstr=['Beam Displacement (in) (',num2str(Beam.Magnitude),'lbs)'];
-
-
 
 plot(Beam.x1, nd, 'r', 'LineWidth',3);
 hold on
@@ -269,9 +299,6 @@ grid on
 title(astr,'fontsize',9,'fontweight','bold');
 xlabel('Beam Length (in)');
 ylabel(bstr);
-
-
-
 
 %% Textual Display of other 2 functions (Not part of Plot Function)
 disp(sprintf('\nSpecial qualities of this beam include:'))
