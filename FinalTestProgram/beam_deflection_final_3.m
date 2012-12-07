@@ -119,7 +119,7 @@ end
 Lmaterial = {'Aluminum','Brass','Chromium','Copper','Iron','Lead','Steel','Tin','Titanium','Zinc'};
 Beam.Material = listdlg('Name','Material type','PromptString','Choose a material:',...
     'ListString',Lmaterial,'SelectionMode','single','ListSize',[200,170]);
-% 	Beam.Material = Lmaterial(Material);  // if I actually need the
+%     Beam.Material = Lmaterial(Material);  // if I actually need the
 % 	name of the material
 
 % Load/Support Parameteres
@@ -132,15 +132,27 @@ supportP = {'Cantilevered','Simply Supported'};
 Beam.Support = listdlg('Name','Support Type','PromptString','Choose a Support Type',...
     'ListString',supportP,'SelectionMode','single','ListSize',[200,170]);               % This saves as number (position on the list, column wise) could be used in a switch situation
 
-Prompt = {'Please in a magnitude for the force:','Please state how far away the force is from the left edge of the beam (in.):'};
-dlg_title = 'Magnitude and Location';
-num_lines = 1;
-def = {'20','3'};
-options.Resize = 'on';
+if Beam.Load == 1
+    Prompt = {'Please in a magnitude for the force:','Please state how far away the force is from the left edge of the beam (in.):'};
+    dlg_title = 'Magnitude and Location';
+    num_lines = 1;
+    def = {'20','3'};
+    options.Resize = 'on';
+    MagLoc = inputdlg(Prompt,dlg_title,num_lines,def,options);
+    Beam.Magnitude = str2double(MagLoc(1,1));
+    Beam.Location = str2double(MagLoc(2,1));
+else
+    Prompt = {'Please in a magnitude for the force:'};
+    dlg_title = 'Magnitude';
+    num_lines = 1;
+    def = {'20','3'};
+    MagLoc = inputdlg(Prompt,dlg_title,num_lines,def,options);
+    Beam.Magnitude = str2double(MagLoc(1,1));
+end
 
-MagLoc = inputdlg(Prompt,dlg_title,num_lines,def,options);
-Beam.Magnitude = str2double(MagLoc(1,1));
-Beam.Location = str2double(MagLoc(2,1));
+if Beam.Load == 2
+    Beam.Location = 1;
+end
 
 if isnan(Beam.Magnitude) == 1 || isnan(Beam.Location) == 1
     beep
