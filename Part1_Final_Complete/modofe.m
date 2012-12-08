@@ -1,30 +1,40 @@
-%% Process - Modulus of Elasticity
-% Elasticity function created by Lawson Hoover
-% function [y1, y2, x] = Elasticity_Deflection(z)
-% Elasticity_Deflection Finds the Modulous of elacticity and then uses that to find the amount of deflection
-%   Should be used in conjunction with the beam_deflection program and
-%           nothing else 
-% Checking To see what the material is and then get the Elasticity
-function E=modofe(Beam)
-    switch Beam.Material
+function modofe = modofe(Material)
+
+%MODOFE Outputs the modulus of elasticity of a specific material. 
+%
+%     Syntax: modofe = modofe(Matieral) outputs the Modulus of Elasticty
+%                                       for the specific material.
+%
+%     Input:
+%      material      The name/number of the input material
+%
+%     Output:
+%      modofe        The modulus of elasticity of the specified material.
+%
+%   Adrian Gose
+%   Hoover High School
+%   0 Period - Mrs. Harris
+%   November 29, 2012
+%
+    switch Material
         case 1
-            E = 10E06;
+            modofe = 10E06;
         case 2
-            E = 15.6E06;
+            modofe = 15.6E06;
         case 3
-            E = 36.0E06;
+            modofe = 36.0E06;
         case 4 
-            E = 15.6E06;
+            modofe = 15.6E06;
         case 5
-            E = 28.5E06;
+            modofe = 28.5E06;
         case 6
-            E = 2.6E06;
+            modofe = 2.6E06;
         case 7
-            E = 30.0E06;
+            modofe = 30.0E06;
         case 8 
-            E = 6.0E06;
+            modofe = 6.0E06;
         case 9 
-            E = 16.8E06;
+            modofe = 16.8E06;
         case 10
-            E = 12.0E06;    
+            modofe = 12.0E06;    
     end
