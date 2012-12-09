@@ -5,7 +5,7 @@
 % Beam Deflection Project: Basecamp Group #10
 %
 % Start Date: November 28, 2012
-% Completion Date: December 8, 2012
+% Completion Date: December 9, 2012
 % 
 % Purpose: To gather and store all of the required input for the beam
 %          deflection program.
@@ -69,6 +69,7 @@
 % -------------------------------------------------------------------------
 % Credit:
 % 
+% Script Header:                     Ryan Starcher
 % Variable Clearing:                 Adrian Gose
 % Input:                             Lawson Hoover
 % Modulus of Elasticity:             Adrian Gose

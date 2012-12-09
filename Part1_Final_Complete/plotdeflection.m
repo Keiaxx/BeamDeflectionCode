@@ -12,10 +12,9 @@ function [P1,P2,P3,P4] = plotdeflection(Beam)
 %      GUI Output of a Loadbar
 %
 %   Ryan Starcher
+%   Cuyahoga Valley Christian Academy
+%   2nd Period - Mr.Bucciarelli
 %   December 6, 2012
-
-
-
 
 % Start convert to Textual String
 switch Beam.Material

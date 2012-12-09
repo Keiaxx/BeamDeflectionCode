@@ -11,7 +11,9 @@ function loadbar(speed)
 %      GUI Output of a Loadbar
 %
 %   Adrian Gose
-%   December 6, 2012
+%   Hoover High School
+%   0 Period - Mrs. Harris
+%   December 9, 2012
 %
 
 speed1arr = linspace(0.0001,0.1,10);

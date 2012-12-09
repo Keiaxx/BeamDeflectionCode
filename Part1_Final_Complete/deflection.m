@@ -17,6 +17,8 @@ function [x1,x2,y1,y2] = deflection(Beam,E,I)
 %      y2 = Y Values right of the point load (IF point type)
 %
 %   Lawson Hoover
+%   Episcopal High School
+%   Period 4 - Mr.Bowman
 %   November 29, 2012
 %
 
